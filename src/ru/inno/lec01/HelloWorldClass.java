@@ -18,7 +18,7 @@ class Logger {
 }
 
 class Animal {
-    static String
+    static String s;
 
 
 }
