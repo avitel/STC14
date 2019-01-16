@@ -13,7 +13,7 @@ public class ArraySortApp {
 
             Integer[] arr = getIntArr();
             ArraySort.print(arr);
-            ArraySort.Bubblesort(arr);
+            ArraySort.bubbleSort(arr);
             System.out.println("----------------");
             ArraySort.print(arr);
 
@@ -23,7 +23,7 @@ public class ArraySortApp {
 
             String[] arr1 = getStringArr();
             ArraySort.print(arr1);
-            ArraySort.Bubblesort(arr1);
+            ArraySort.bubbleSort(arr1);
             System.out.println("----------------");
             ArraySort.print(arr1);
 

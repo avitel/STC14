@@ -11,7 +11,7 @@ public class ArraySort {
      * Выполняет сортировку массива Integer методом пузырька
      * @param arr -  массив объектов, который требуется отсортировать
      */
-    public static void Bubblesort(Integer[] arr) {
+    public static void bubbleSort(Integer[] arr) {
 
         int out, in;
 
@@ -35,7 +35,7 @@ public class ArraySort {
      * Выполняет сортировку массива String методом пузырька
      * @param arr -  массив объектов, который требуется отсортировать
      */
-    public static void Bubblesort(String[] arr) {
+    public static void bubbleSort(String[] arr) {
 
         int out, in;
 
