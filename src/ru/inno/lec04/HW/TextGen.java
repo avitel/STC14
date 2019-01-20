@@ -1,76 +1,137 @@
 package ru.inno.lec04.HW;
 import java.io.*;
+import java.util.*;
 
 /**
+ *  Text generator which makes random text from dictionary.
+ *  Dictionary is loaded from text file
+ *
  * @author Ilya Kruglov
  * @version 1.0
  */
 
 public class TextGen {
 
-    private int n1;
-    private int n3;
+    /**
+     * number of words in sentence
+     */
+    static private int n1;
 
+    /**
+     * number of sentence in paragraph
+     */
+    static private int n3;
 
-    public TextGen(int n1, int n3) {
-
-        /**
-         * колво слов
-         */
-        this.n1 = n1;
-        /**
-         * колво предложений
-         */
-        this.n3 = n3;
-
-    }
 
     public static void main(String[] args) {
 
-        TextGen tg = new TextGen(10, 4 );
+        HashSet<String> arr = getDictionary("./Files/book");
 
-        String[] arr = getWordSet(15 , 100);
+        saveDictionary(arr);
 
-        tg.getFiles("./testGenFiles",2,4, arr, 1);
+        n1 = 10;
+        n3 = 10;
+        getFiles("./Files/testGenFiles",3000,10, arr, 1);
     }
 
+
     /**
+     * Gets array with words from text file
      *
-     * @param path путь к файлу. К имени будет добавлена цифра индекса
-     * @param n количество файлов
-     * @param size количество абзацев в файле
-     * @param words массив слов
-     * @param probability вероятность (не используется)
+     * @param path plain text file from which you want to get dictionary
+     * @return array HashSet<String> with unique words from the text file
      */
-    public  void getFiles(String path, int n, int size, String[] words, int probability){
+    private static HashSet<String> getDictionary(String path){
+
+        HashSet<String> arr= new HashSet<String >();
+
+        try{
+            FileInputStream fstream = new FileInputStream(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            String strLine;
+            int i = 0;
+            while ((strLine = br.readLine()) != null){
+
+                strLine = strLine.replaceAll(",|\\.|-|;|!|–|:|\\?","");
+                String[] words = strLine.split(" ");
+                for (String word : words) {
+                    if (word.length() == 0 | word.length() == 1) continue;
+
+                    arr.add(word);
+                    i++;
+                }
+
+            }
+        }catch (IOException e){
+            System.out.println("Ошибка разбора файла");
+        }
+
+        return arr;
+    }
+
+
+
+    /**
+     * Saves dictionary to plain text for further processing
+     * @param arr
+     */
+    private static void saveDictionary(HashSet<String> arr){
+
+        try(FileWriter writer = new FileWriter("./Files/dictionary.txt", false)){
+            for (String s : arr) {
+                writer.write(s);
+                writer.append('\n');
+            }
+        }
+        catch(IOException ex){
+
+            System.out.println(ex.getMessage());
+        }
+    }
+
+
+    /**
+     * Makes text file from dictionary with random order
+     *
+     * @param path path to file. Index will be appended
+     * @param numberOfFiles number of files
+     * @param size number of paragraphes
+     * @param dictionary  HashSet<String> dictionary (array of words)
+     * @param probability not used
+     */
+    public  static void getFiles(String path, int numberOfFiles, int size, HashSet<String> dictionary, int probability){
+
+        List<String > arr = new ArrayList<String>(dictionary);
+        String word;
 
         /**
-         * по файлам
+         * files
          */
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < numberOfFiles; i++) {
 
             try(FileWriter writer = new FileWriter(path + i, false))
             {
                 /**
-                 * по абзацем
+                 * paragpaph
                  */
                 for (int j = 0; j < size; j++) {
 
                     /**
-                     * по предложениям
+                     * sentences
                      */
                     for (int k = 0; k < n3; k++) {
 
                         boolean itIsFirstWord = true;
 
                         /**
-                         * по словам
+                         * words
                          */
                         for (int l = 0; l < n1; l++) {
 
-                            writer.append(' ');
+                            Random random = new Random();
+                            word = arr.get((int)random.nextInt(arr.size()-1));
 
-                            String word = getWord(words);
+                            writer.append(' ');
 
                             if (itIsFirstWord) {
                                 itIsFirstWord = false;
@@ -85,7 +146,6 @@ public class TextGen {
                         writer.append('.');
                     }
                     writer.append('\n');
-                    writer.append('\r');
                 }
             }
             catch(IOException ex){
@@ -94,36 +154,8 @@ public class TextGen {
             }
         }
     }
-
-    /**
-     *
-     * @param n2 максимальная длина слова
-     * @param n4 кол-во слов в массиве
-     * @return массив рандомных слов
-     */
-    private static String[] getWordSet(int n2 , int n4){
-
-        String[] arr = new String[n4];
-
-        for (int i = 0; i < arr.length; i++) {
-            int curLenght = (int)(Math.random()*n2+1);
-            char[] curLetters = new char[curLenght];
-            for (int k = 0; k <  curLenght; k++) {
-                curLetters[k] = (char)(Math.random()*('z'-'a') + 'a');
-            }
-
-            arr[i] = new String(curLetters);
-        }
-
-        return arr;
-    }
-
-
-    private String getWord(String[] arr){
-
-        int rndInd = (int)(Math.random() * arr.length);
-
-        return arr[rndInd];
-
-    }
 }
+
+
+
+
