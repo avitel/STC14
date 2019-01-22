@@ -23,7 +23,7 @@ public class CollectData {
     /**
      * number of threads
      */
-    public static int numbetOfThreads = 100;
+    public static int numbetOfThreads = 10;
 
 
 

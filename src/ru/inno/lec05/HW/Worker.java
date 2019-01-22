@@ -1,9 +1,6 @@
 package ru.inno.lec05.HW;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -59,8 +56,7 @@ public class Worker extends Thread {
     }
 
     public void parseFile(String filename){
-        try (FileInputStream fstream = new FileInputStream(filename)) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        try   (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))){
             int letter;
             StringBuilder builder = new StringBuilder();
             while ((letter = br.read()) != -1){
