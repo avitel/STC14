@@ -53,6 +53,13 @@ public class Serialize {
         saveFile(out, filename);
     }
 
+
+    /**
+     *
+     * @param out
+     * @param key
+     * @param value
+     */
     private static void addKeyValue(StringBuilder out, String key, String value){
         out.append("\"" + key + "\":" + value);
 
@@ -87,9 +94,11 @@ public class Serialize {
     }
 
 
-
-
-
+    /**
+     *
+     * @param filename
+     * @return
+     */
     static Object deSerialize(String filename){
 
         Map<String, String> map = new HashMap<String, String>();
@@ -132,10 +141,18 @@ public class Serialize {
         return processMap(map);
     }
 
+
+    /**
+     *
+     * @param map
+     * @param key
+     * @param value
+     */
     private static void processKeyValue(Map<String, String> map, String key, String value){
 
         map.put(key.replaceAll("\n|\"| ",""), value.replaceAll("\n|\"| ",""));
     }
+
 
     /**
      *
