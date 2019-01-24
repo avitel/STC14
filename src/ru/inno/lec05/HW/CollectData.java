@@ -11,7 +11,7 @@ public class CollectData {
     /**
      * this variable for read only. there are no necessary to synchronize
      */
-    public HashSet<String> dictionary = new HashSet<String>();
+    public HashSet<String> dictionary = new HashSet<>();
 
 
     /**
@@ -116,7 +116,7 @@ public class CollectData {
         ArrayList<Thread> threads = new ArrayList<>();
         for (int i = 1; i <= numberOfThreads; i++) {
 
-            List<String> arr = new ArrayList<String>();
+            List<String> arr = new ArrayList<>();
 
             while (arr.size() < numberOfFilesPerThread) {
                 if (index >= inFiles.length) break;

@@ -2,6 +2,7 @@ package ru.inno.lec02.HW;
 
 import java.util.Random;
 
+
 /**
  * Приложение для демонстрации работы алгоритмов сортировки
  * @author Kruglov Ilya
@@ -16,13 +17,21 @@ public class ArraySortApp {
             Integer[] arr = getIntArr();
             print(arr);
 
-            ArraySort.bubbleSort(arr);
+            try {
+                (new ArraySort()).bubbleSort(arr);
+            }catch (IllegalArgumentException e){
+                System.out.println(e);
+            }
 
             System.out.println("----------------");
             print(arr);
         }
 
 
+        /**
+         * Формирует массив Integer случайным образом
+         * @return
+         */
         private static Integer[] getIntArr(){
             int maxSize = 10;
 
@@ -33,10 +42,11 @@ public class ArraySortApp {
             for(int j=0; j<maxSize; j++)
                 arr[j] = (int)(random.nextInt(99));
 
-            //arr[5] = null;
+            arr[5] = null;
 
             return arr;
         }
+
 
         /**
          * Выводит в консоль ссылочный массив

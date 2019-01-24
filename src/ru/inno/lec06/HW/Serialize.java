@@ -1,7 +1,6 @@
 package ru.inno.lec06.HW;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,7 +100,7 @@ public class Serialize {
      */
     static Object deSerialize(String filename){
 
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))){
             int letter;

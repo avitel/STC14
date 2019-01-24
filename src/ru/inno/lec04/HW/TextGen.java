@@ -43,7 +43,7 @@ public class TextGen {
      */
     private static HashSet<String> getDictionary(String path){
 
-        HashSet<String> arr= new HashSet<String >();
+        HashSet<String> arr= new HashSet<>();
 
         try{
             FileInputStream fstream = new FileInputStream(path);
@@ -101,7 +101,7 @@ public class TextGen {
      */
     public  static void getFiles(String path, int numberOfFiles, int size, HashSet<String> dictionary, int probability){
 
-        List<String > arr = new ArrayList<String>(dictionary);
+        List<String > arr = new ArrayList<>(dictionary);
         String word;
 
         /**

@@ -10,7 +10,7 @@ public class Worker extends Thread {
     private List<String> inFiles;
     private HashSet<String> dictionary;
     private CollectData c;
-    private ArrayList<String> res = new ArrayList<String>();
+    private ArrayList<String> res = new ArrayList<>();
 
     public Worker(List<String> inFiles, CollectData c) {
         this.inFiles = inFiles;

@@ -8,13 +8,13 @@ import java.util.TreeSet;
  * @param <T>
  */
 
-public class MathBox<T extends Number> extends ObjectBox{
+public class MathBox<T extends Number & Comparable> extends ObjectBox{
 
 
     public static void main(String[] args) {
 
         System.out.println("-------пример с Integer----------");
-        MathBox<Integer> mb = new MathBox<Integer>(new Integer[]{9,4,6,8,5,3,12,7,18,15,13});
+        MathBox<Integer> mb = new MathBox<>(new Integer[]{9,4,6,8,5,3,12,7,18,15,13});
         System.out.println(mb);
         System.out.println("summ : " + mb.summator());
 
@@ -24,7 +24,7 @@ public class MathBox<T extends Number> extends ObjectBox{
         System.out.println(mb);
 
         System.out.println("------------пример с Float--------------");
-        MathBox<Float> mb1 = new MathBox<Float>(new Float[]{9f,4f,6f,8f,5f,3f,12f,7f,18f,15f,13f});
+        MathBox<Float> mb1 = new MathBox<>(new Float[]{9f,4f,6f,8f,5f,3f,12f,7f,18f,15f,13f});
         System.out.println(mb1);
         System.out.println("summ : " + mb1.summator());
 
@@ -63,7 +63,7 @@ public class MathBox<T extends Number> extends ObjectBox{
      * @return
      */
     public TreeSet<Double> splitter(Double div){
-        TreeSet<Double> out  = new TreeSet<Double>();
+        TreeSet<Double> out  = new TreeSet<>();
         TreeSet<T> in = getIn();
         for (T current : in) {
             out.add(current.doubleValue()/div);
