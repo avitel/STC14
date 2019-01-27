@@ -3,9 +3,9 @@ package ru.inno.lec06.HW;
 import java.util.Objects;
 
 public class testObject{
-    int field1;
-    String field2;
-    double field3;
+    private int field1;
+    private String field2;
+    private double field3;
 
     public testObject(int field1, String field2, double field3) {
         this.field1 = field1;

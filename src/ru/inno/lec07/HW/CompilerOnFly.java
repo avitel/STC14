@@ -1,21 +1,33 @@
 package ru.inno.lec07.HW;
 
 
+import ru.inno.lec04.HW.MyUtilities;
+
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
+/**
+ * class do only one function : compilation on fly
+ */
 public class CompilerOnFly {
 
-    private static String className;
-    private static String packagePath;
+    private String className;
+    private String packagePath;
 
-    public static void main(String[] args) {
 
-        className = "SomeClass";
-        packagePath = "ru.inno.lec07.HW";
+    public CompilerOnFly(String className, String packagePath) {
+        this.className = className;
+        this.packagePath = packagePath;
+    }
+
+    public CompilerOnFly() {}
+
+
+    /**
+     * perform input code, compile, load and run
+     */
+    public void doCompileOnFly() {
 
         //reading keyboard
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -43,7 +55,7 @@ public class CompilerOnFly {
 
         //write class.java
         String filename = "./"+className + ".java";
-        saveFile(sourse, filename);
+        MyUtilities.saveFile(sourse, filename);
 
         //compile
         compile(filename);
@@ -60,23 +72,15 @@ public class CompilerOnFly {
 
         //execution
         someClass.doWork();
-
     }
 
 
-
-    public static void saveFile(StringBuilder out, String filename){
-
-        try {
-            Files.write(Paths.get(filename), out.toString().getBytes());
-        }catch(IOException e){
-            System.out.println("saving file error");
-        }
-    }
-
-
-
-    public static void compile(String filename){
+    /**
+     * Compiles file. Compiled file is put in the same directory.
+     *
+     * @param filename
+     */
+    public void compile(String filename){
 
         JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
 
@@ -87,4 +91,5 @@ public class CompilerOnFly {
             System.out.println("compilation exception " + e);
         }
     }
+
 }

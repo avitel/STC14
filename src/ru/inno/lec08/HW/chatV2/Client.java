@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 
 /**
- *
+ * client process
  *
  */
 public class Client {
@@ -21,7 +21,11 @@ public class Client {
     }
 
 
-
+    /**
+     * Connects to server
+     * @param name
+     * @return
+     */
     public Socket connect(String name){
         try {
             socket = new Socket("127.0.0.1", Server.PORT);
@@ -39,7 +43,10 @@ public class Client {
     }
 
 
-
+    /**
+     * sends message to server
+     * @param message
+     */
     public void send(String message){
         if (!socket.isClosed()){
 
@@ -53,7 +60,9 @@ public class Client {
     }
 
 
-
+    /**
+     * closes resourses
+     */
     public void close(){
         try{
             writer.close();
@@ -63,7 +72,9 @@ public class Client {
         }
     }
 
-
+    /**
+     * reads message from keyboard and sends to socket
+     */
     public void InputAndSend(){
 
         String name = "";
@@ -90,9 +101,12 @@ public class Client {
                 message = keyboardReader.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
+                close();
+                break;
             }
 
             if (socket.isClosed()) break;
+
             send(message);
             if ("quit".equals(message)) break;
 

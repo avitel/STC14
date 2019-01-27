@@ -1,6 +1,6 @@
 package ru.inno.lec05.HW;
 
-import ru.inno.lec04.HW.WorkWithFiles;
+import ru.inno.lec04.HW.MyUtilities;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class App {
             System.out.println("thread waiting was interrupted");
         }
 
-        WorkWithFiles.saveCollectionToFile(cd.getArrRes(),"./Files/res.txt");
+        MyUtilities.saveCollectionToFile(cd.getArrRes(),"./Files/res.txt");
 
         long finish2 = System.currentTimeMillis();
         long timeConsumedMillis2 = finish2 - start;

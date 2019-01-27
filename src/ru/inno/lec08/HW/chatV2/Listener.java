@@ -3,7 +3,10 @@ package ru.inno.lec08.HW.chatV2;
 import java.io.*;
 import java.net.Socket;
 
-
+/**
+ * thread for listening port and connect new clients
+ *
+ */
 public class Listener extends Thread {
 
     private final Server server;
@@ -15,9 +18,6 @@ public class Listener extends Thread {
     }
 
 
-    /**
-     *
-     */
     @Override
     public void run() {
 
@@ -25,7 +25,7 @@ public class Listener extends Thread {
 
         while (true) {
             try {
-                Socket socket = server.serverSocket.accept();
+                Socket socket = server.getServerSocket().accept();
 
                 if (isInterrupted()) break;
 

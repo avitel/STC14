@@ -1,38 +1,30 @@
 package ru.inno.lec06.HW;
 
+import ru.inno.lec04.HW.MyUtilities;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ *  perform covert Object to JSON and back
+ */
 public class Serialize {
 
-    public static void main(String[] args) {
-        testObject t = new testObject(1, "строка", 454.3543534d);
-        Serialize.serialize(t, "./testSerialize");
-
-        Object t1 = deSerialize("./testSerialize");
-        if (t.equals(t1)) System.out.println("objects are identical");
-        else System.out.println("objects are different! something went wrong!");
-    }
-
-
     /**
+     * serialize Object to JSON and save to file
      *
      * @param in
      * @param filename
      */
-    static void serialize(Object in, String filename){
+    public void serialize(Object in, String filename){
 
         StringBuilder out = new StringBuilder();
 
         out.append("{");
-
         Class clazz = in.getClass();
-
         addKeyValue(out, "class", "\"" + clazz.getName() + "\"");
-
 
         Field[] fields = clazz.getDeclaredFields();
 
@@ -46,32 +38,31 @@ public class Serialize {
                 System.out.println(e);
             }
         }
-
         out.append("}");
-
-        saveFile(out, filename);
+        MyUtilities.saveFile(out, filename);
     }
 
 
-
     /**
+     * Adds key-value pair in stringBuilder
      *
      * @param out
      * @param key
      * @param value
      */
-    private static void addKeyValue(StringBuilder out, String key, String value){
+    private void addKeyValue(StringBuilder out, String key, String value){
         out.append("\"" + key + "\":" + value);
 
     }
 
 
     /**
+     * return name of object. If it is string - surrounds it with ""
      *
      * @param o
      * @return
      */
-    private static String convertToString(Object o) {
+    private String convertToString(Object o) {
         if (o == null) return "null";
         else {
             if ("String".equals(o.getClass().getSimpleName())) return "\"" + o + "\"";
@@ -81,25 +72,12 @@ public class Serialize {
 
 
     /**
-     *
-     * @param filename
-     */
-    private static void saveFile(StringBuilder out, String filename){
-
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filename))) {
-            bufferedWriter.write(out.toString());
-        }catch (IOException e){
-            System.out.println("save result error");
-        }
-    }
-
-
-    /**
+     * create Object from JSON file
      *
      * @param filename
      * @return
      */
-    static Object deSerialize(String filename){
+    public Object deSerialize(String filename){
 
         Map<String, String> map = new HashMap<>();
 
@@ -142,24 +120,28 @@ public class Serialize {
     }
 
 
+
     /**
+     * cut excess quotes from key-value and puts it to map
      *
      * @param map
      * @param key
      * @param value
      */
-    private static void processKeyValue(Map<String, String> map, String key, String value){
+    private void processKeyValue(Map<String, String> map, String key, String value){
 
         map.put(key.replaceAll("\n|\"| ",""), value.replaceAll("\n|\"| ",""));
     }
 
 
+
     /**
+     * create object from map
      *
      * @param map
      * @return
      */
-    private static Object getObjectFromMap(Map<String, String> map){
+    private Object getObjectFromMap(Map<String, String> map){
 
         String className = map.get("class");
 
@@ -202,9 +184,7 @@ public class Serialize {
             System.out.println(e);
             return null;
         }
-        
         return obj;
-
     }
 }
 

@@ -3,6 +3,9 @@ package ru.inno.lec08.HW.chatV2;
 import java.io.*;
 import java.util.List;
 
+/**
+ * class perform receive messages from clients and forwards to others
+ */
 public class ServerSocketProcessor extends Thread{
     private final Server server;
 
@@ -12,9 +15,6 @@ public class ServerSocketProcessor extends Thread{
     }
 
 
-    /**
-     *
-     */
     @Override
     public void run() {
         System.out.println("server socket processor started");
@@ -29,23 +29,26 @@ public class ServerSocketProcessor extends Thread{
 
                 if (isInterrupted()) break;
 
+                ClientData client = clients.get(ind);
+                BufferedReader reader = client.getReader();
                 try {
-                    ClientData client = clients.get(ind);
 
-                    if (client.reader.ready()){
-                        String message = client.reader.readLine();
+                    if (reader.ready()){
+                        String message = reader.readLine();
 
                         if ("quit".equals(message)) {
                             server.leaveChat(ind);
                             break;
                         }
-                        server.sendToAll(client.name + " : " + message, ind);
+                        server.sendToAll(client.getName() + " : " + message, ind);
                     }
 
                 }catch (ArrayIndexOutOfBoundsException e) {
                     break;
                 }catch (IOException e) {
-                    System.out.println(e);
+                    server.removeClient(ind);
+                    server.sendToAll(client.getName() + " disconnected" , ind);
+                    System.out.println(client.getName() + " disconnected");
                     break;
                 }
             }

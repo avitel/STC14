@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+
+/**
+ * client process for reading
+ *
+ */
 public class ClientSocketReader extends Thread {
     private final Socket socket;
     private BufferedReader reader;
@@ -17,8 +22,8 @@ public class ClientSocketReader extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 
 
     @Override
@@ -38,23 +43,30 @@ public class ClientSocketReader extends Thread {
             }
             System.out.println(message);
         }
-
         close();
         System.out.println("client socket reader closed");
     }
 
 
 
+    /**
+     * gets message from socket
+     * @return
+     */
     public String getMessage() {
         try {
             return reader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
 
+    /**
+     * close buffered reader
+     *
+     */
     public void close(){
         try {
             reader.close();
@@ -62,7 +74,6 @@ public class ClientSocketReader extends Thread {
             e.printStackTrace();
         }
     }
-
 }
 
 

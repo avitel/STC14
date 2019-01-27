@@ -1,20 +1,33 @@
 package ru.inno.lec08.HW.chatV2;
 
+import ru.inno.lec04.HW.MyUtilities;
+
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * bot for immitation of chatting
+ */
 public class ClientBot {
 
     public static List<Client> clients = new ArrayList<>();
     public static List<ClientSocketReader> clientsReaders = new ArrayList<>();
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
+        ClientBot cb = new ClientBot();
+        cb.start();
+
+    }
+
+    public ClientBot() {}
+
+    public  void start() {
 
         //clients connection
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 10; i++) {
             Client client = new Client();
 
             Random random = new Random();
@@ -28,16 +41,24 @@ public class ClientBot {
             clientsReaders.add(clientReader);
         }
 
-        Thread.sleep(100);
+        try {
+            Thread.sleep(100);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
 
 
         //chatting
         for (int i = 0; i < 50; i++) {
 
             for (Client client : clients) {
-                String message = getRandomtext();
+                String message = MyUtilities.getRandomtext();
                 client.send(message);
-                Thread.sleep(1);
+                try {
+                    Thread.sleep(100);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
 
             for (ClientSocketReader client : clientsReaders) {
@@ -55,7 +76,11 @@ public class ClientBot {
         //closing
         for (Client client : clients) {
             client.send("quit");
-            Thread.sleep(10);
+            try {
+                Thread.sleep(100);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
         }
 
         for (ClientSocketReader client : clientsReaders) {
@@ -65,20 +90,5 @@ public class ClientBot {
         for (Client client : clients) {
             client.close();
         }
-
-
-    }
-
-
-    public static String getRandomtext(){
-        Random rnd = new Random();
-        int length = rnd.nextInt(100);
-        StringBuilder builder = new StringBuilder();
-        String chars = "abcdefghijklmnopqrstuvwxyz";
-        for (int i = 0; i < length; i++) {
-            builder.append(chars.charAt(rnd.nextInt(chars.length())));
-        }
-
-        return builder.toString();
     }
 }

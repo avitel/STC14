@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- *
+ * Class
  *
  */
 
@@ -18,53 +18,32 @@ public class Server {
 
     private final CopyOnWriteArrayList<ClientData> clients = new CopyOnWriteArrayList<>();
     public static final int PORT = 10000;
-    public ServerSocket serverSocket;
+    private ServerSocket serverSocket;
 
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
 
     /**
-     *
-     * @param c
+     * Adds client to array and send messages
+     * @param client
      */
-    public void addClient(ClientData c) {
+    public void addClient(ClientData client) {
 
-        clients.add(c);
+        clients.add(client);
         int ind = clients.size()-1;
 
-        System.out.println("client  " + c.name + " connected");
-        c.sendToClent(c.name + " welcome on board!");
-        sendToAll(c.name + " joined the chat", ind);
+        String name = client.getName();
 
+        System.out.println("client  " + name + " connected");
+        client.sendToClent(name + " welcome on board!");
+        sendToAll(name + " joined the chat", ind);
     }
 
 
     /**
-     *
-     * @param ind
-     * @return
-     */
-    public ClientData getClient(int ind) {
-        return clients.get(ind);
-    }
-
-
-    /**
-     *
-     * @param ind
-     */
-    public void removeClient(int ind) {
-        ClientData client = getClient(ind);
-        try {
-            client.reader.close();
-            client.writer.close();
-            client.socket.close();
-        } catch (IOException e) {
-            System.out.println("close resourses error");
-        }
-        clients.remove(ind);
-    }
-
-
-    /**
+     * Gets array of clients data
      *
      * @return
      */
@@ -74,17 +53,22 @@ public class Server {
 
 
     /**
+     * Send message to all clients exept one
+     *
      * @param message
      */
     public void sendToAll(String message, int except) {
 
         for (int i = 0; i < clients.size(); i++) {
-            if (i != except) sendToClent(i, message);
+            if (i != except) {
+                sendToClent(i, message);
+            }
         }
     }
 
 
     /**
+     * Send message to client with index
      *
      * @param ind
      * @param message
@@ -92,21 +76,38 @@ public class Server {
     public void sendToClent(int ind, String message) {
 
         ClientData client = clients.get(ind);
-        client.sendToClent(message);
+        if (!client.sendToClent(message)) {
+            removeClient(ind);
+        }
     }
 
 
     /**
+     * Remove client data with index
+     *
+     * @param ind
+     */
+    public void removeClient(int ind) {
+        ClientData client = clients.get(ind);
+        client.closeResourses();
+        clients.remove(ind);
+    }
+
+
+    /**
+     * remove client data and send messages
      *
      * @param ind
      */
     public void leaveChat(int ind){
         ClientData client = clients.get(ind);
+        String name = client.getName();
 
-        sendToAll(client.name + " leaved the chat", ind);
-        System.out.println(client.name + " leaved the chat");
+        sendToAll(name + " leaved the chat", ind);
+        System.out.println(name + " leaved the chat");
         removeClient(ind);
     }
+
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -120,7 +121,6 @@ public class Server {
         Thread listener = new Listener(server);
         listener.start();
 
-        // keyboard reading
         BufferedReader keyboardReader = new BufferedReader(new InputStreamReader(System.in));
 
         String word = null;
@@ -143,41 +143,6 @@ public class Server {
 
         System.out.println("server closed");
     }
-
-
-}
-
-
-/**
- *
- */
-class ClientData{
-
-    public Socket socket;
-    public String name;
-    public BufferedWriter writer;
-    public BufferedReader reader;
-
-
-    public ClientData(Socket socket, String name, BufferedWriter bw, BufferedReader br) {
-        this.socket = socket;
-        this.name = name;
-        this.writer = bw;
-        this.reader = br;
-    }
-
-
-    public void sendToClent(String message) {
-
-        try {
-            writer.write(message + "\n");
-            writer.flush();
-        } catch (IOException e) {
-            System.out.println("send message error to " + name);
-            System.out.println(e);
-        }
-    }
-
 }
 
 
