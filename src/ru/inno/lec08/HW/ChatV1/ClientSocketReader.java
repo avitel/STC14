@@ -1,4 +1,4 @@
-package ru.inno.lec08.HW;
+package ru.inno.lec08.HW.ChatV1;
 
 import java.io.BufferedReader;
 import java.io.IOException;

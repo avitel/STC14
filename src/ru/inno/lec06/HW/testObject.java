@@ -13,8 +13,9 @@ public class testObject{
         this.field3 = field3;
     }
 
-    public testObject() {
-    }
+
+    public testObject(){}
+
 
     @Override
     public boolean equals(Object o) {
@@ -25,6 +26,7 @@ public class testObject{
                 Double.compare(that.field3, field3) == 0 &&
                 Objects.equals(field2, that.field2);
     }
+
 
     @Override
     public int hashCode() {

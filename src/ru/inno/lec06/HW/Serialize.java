@@ -33,8 +33,8 @@ public class Serialize {
 
         addKeyValue(out, "class", "\"" + clazz.getName() + "\"");
 
-        Field[] fields = clazz.getDeclaredFields();
 
+        Field[] fields = clazz.getDeclaredFields();
 
         for (Field field : fields) {
             out.append(", \n");
@@ -51,6 +51,7 @@ public class Serialize {
 
         saveFile(out, filename);
     }
+
 
 
     /**
@@ -137,7 +138,7 @@ public class Serialize {
             System.out.println("file parsing error");
         }
 
-        return processMap(map);
+        return getObjectFromMap(map);
     }
 
 
@@ -158,7 +159,7 @@ public class Serialize {
      * @param map
      * @return
      */
-    private static Object processMap(Map<String, String> map){
+    private static Object getObjectFromMap(Map<String, String> map){
 
         String className = map.get("class");
 

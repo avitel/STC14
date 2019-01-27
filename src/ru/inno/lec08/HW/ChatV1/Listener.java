@@ -1,4 +1,4 @@
-package ru.inno.lec08.HW;
+package ru.inno.lec08.HW.ChatV1;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -29,7 +29,6 @@ public class Listener extends Thread {
 
                 //server socket processor
                 ServerSocketProcessor sp = new ServerSocketProcessor(clientSocket, server);
-                sp.setDaemon(true);
                 sp.start();
 
                 server.addClientThread(sp);

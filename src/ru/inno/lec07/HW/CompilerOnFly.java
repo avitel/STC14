@@ -65,7 +65,7 @@ public class CompilerOnFly {
 
 
 
-    private static void saveFile(StringBuilder out, String filename){
+    public static void saveFile(StringBuilder out, String filename){
 
         try {
             Files.write(Paths.get(filename), out.toString().getBytes());
@@ -76,7 +76,7 @@ public class CompilerOnFly {
 
 
 
-    private static void compile(String filename){
+    public static void compile(String filename){
 
         JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
 

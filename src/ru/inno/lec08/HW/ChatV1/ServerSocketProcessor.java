@@ -1,4 +1,4 @@
-package ru.inno.lec08.HW;
+package ru.inno.lec08.HW.ChatV1;
 
 import java.io.*;
 import java.net.Socket;
@@ -35,21 +35,29 @@ public class ServerSocketProcessor extends Thread{
             server.sendToAll(name + " joined the chat", this);
 
             while (true) {
-                message = br.readLine();
 
-                if (isInterrupted()) break;
+                if (br.ready()){
+                    message = br.readLine();
 
-                if (message.equals("quit")) {
+                    if (message.equals("quit")) {
 
-                    server.sendToAll(name + " leaved the chat", this);
-                    sendToClent("quit");
-                    server.removeClientThread(this);
+                        server.sendToAll(name + " leaved the chat", this);
+                        sendToClent("quit");
+                        server.removeClientThread(this);
+                        closeResourses();
+                        break;
+                    }
+
+                    //write to all
+                    server.sendToAll(name + " : " + message, this);
+                }
+
+
+                if (isInterrupted()) {
                     closeResourses();
                     break;
                 }
 
-                //write to all
-                server.sendToAll(name + " : " + message, this);
             }
 
 
