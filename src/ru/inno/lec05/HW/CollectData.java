@@ -5,74 +5,60 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class CollectData {
 
-    /**
-     * this variable for read only. there are no necessary to synchronize
-     */
-    public HashSet<String> dictionary = new HashSet<>();
+    private HashSet<String> dictionary = new HashSet<>();
 
+    private List<String> arrRes = new CopyOnWriteArrayList<>();
 
-    /**
-     *  this var for multi-threaded write. synchronized.
-     */
-    public volatile ArrayList<ArrayList<String>> arrRes = new ArrayList<ArrayList<String>>();
+    private int maxNumberOfThreads;
 
+    public void setDictionary(HashSet<String> dictionary) {
+        this.dictionary = dictionary;
+    }
 
-    /**
-     * number of threads
-     */
-    public static int numbetOfThreads = 10;
+    public void setMaxNumberOfThreads(int maxNumberOfThreads) {
+        this.maxNumberOfThreads = maxNumberOfThreads;
+    }
 
+    public HashSet<String> getDictionary() {
+        return dictionary;
+    }
 
+    public List<String> getArrRes() {
+        return arrRes;
+    }
 
-    public static void main(String[] args) {
+    public int getMaxNumberOfThreads() {
+        return maxNumberOfThreads;
+    }
 
-        long start = System.currentTimeMillis();
+    public void addToArrRes(String str){
+        arrRes.add(str);
+    }
 
-        CollectData cd = new CollectData();
-        cd.loadDictionary("./Files/dictionary.txt", 100);
-
-        List<Thread> threads = cd.startParsing(numbetOfThreads, getInFilesNames("./Files", "testGenFiles"));
-
-        long finish1 = System.currentTimeMillis();
-        long timeConsumedMillis = finish1 - start;
-        System.out.println("starting worker time : "+ timeConsumedMillis + " ms");
-
-        /**
-         * wait for finishing
-         */
-        try {
-            for (Thread thread : threads) {
-                thread.join();
-            }
-        }catch (InterruptedException e){
-            System.out.println("thread waiting was interrupted");
-        }
-
-        cd.saveFile("./Files/res.txt");
-
-        long finish2 = System.currentTimeMillis();
-        long timeConsumedMillis2 = finish2 - start;
-        System.out.println("total time : "+ timeConsumedMillis2 + " ms");
+    public void addAllToArrRes(ArrayList<String> arr){
+        arrRes.addAll(arr);
     }
 
 
     /**
+     * Gets array of filenames on specified dirname and mask
      *
      * @param dirname
-     * @param inFileName
+     * @param mask
      * @return array of full filenames contained in 'dirname' with mask 'inFileName'
      */
-    private static String[] getInFilesNames(String dirname, String inFileName){
+    public static String[] getInFilesNames(String dirname, String mask){
         File dir = new File(dirname);
 
         String[] inFiles = dir.list(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.startsWith(inFileName);
+                return name.startsWith(mask);
             }
         });
         for (int i = 0; i < inFiles.length; i++) {
@@ -83,9 +69,9 @@ public class CollectData {
 
 
     /**
-     *
+     * Loads dictionary from file
      * @param filename
-     * @param limit - max number of words
+     * @param limit - max number of words when load stops
      */
     public  void loadDictionary(String filename, int limit){
         try (FileInputStream fstream = new FileInputStream(filename)) {
@@ -93,7 +79,9 @@ public class CollectData {
             String strLine;
             while ((strLine = br.readLine()) != null){
                 dictionary.add(strLine);
-                if (dictionary.size() == limit) break;
+                if (dictionary.size() == limit) {
+                    break;
+                }
             }
 
         }catch (IOException e){
@@ -103,14 +91,15 @@ public class CollectData {
 
 
     /**
+     * Starts threads for parsing array of files
      * Only variant when 1 file is processed by 1 thread
      *
-     * @param numberOfThreads
      * @param inFiles
+     * @return List  List of started threads
      */
-    public ArrayList<Thread> startParsing(int numberOfThreads, String[] inFiles) {
+    public ArrayList<Thread> startParsing(String[] inFiles) {
 
-        numberOfThreads = Math.min(numberOfThreads, inFiles.length);
+        int numberOfThreads = Math.min(maxNumberOfThreads, inFiles.length);
         int numberOfFilesPerThread = (int)Math.round(inFiles.length / numberOfThreads);
         int index = 0;
 
@@ -120,43 +109,24 @@ public class CollectData {
             List<String> arr = new ArrayList<>();
 
             while (arr.size() < numberOfFilesPerThread) {
-                if (index >= inFiles.length) break;
+                if (index >= inFiles.length) {
+                    break;
+                }
                 arr.add(inFiles[index++]);
             }
 
-            /**
-             * the last thread must catch the rest
-             */
+             //the last thread must take the rest
             if (i == numberOfThreads) {
                 while (index < inFiles.length) {
                     arr.add(inFiles[index++]);
                 }
             }
 
-            Thread thread = new Worker(arr, this);
+            Worker worker = new Worker(arr, this);
+            Thread thread = new Thread(worker);
             thread.start();
             threads.add(thread);
         }
-
         return threads;
-    }
-
-
-    /**
-     *
-     * @param filename
-     */
-    public void saveFile(String filename){
-        try(FileWriter writer = new FileWriter(filename, false)) {
-            for (ArrayList<String> ara : arrRes) {
-                for (String sentence : ara) {
-                    writer.write(sentence);
-                    writer.write('\n');
-                }
-            }
-
-        }catch (IOException e){
-            System.out.println("save result error");
-        }
     }
 }

@@ -9,7 +9,6 @@ import java.util.*;
  * @author Ilya Kruglov
  * @version 1.0
  */
-
 public class TextGen {
 
     private int numberOfFiles;
@@ -20,20 +19,8 @@ public class TextGen {
 
 
     
-    public static void main(String[] args) {
-        
-        TextGen tg = new TextGen(3000, 10, 10,10);
-
-        tg.loadDictionaryFromBook("./Files/book");
-
-        tg.saveDictionary();
-
-        tg.makeFiles("./Files/testGenFiles");
-    }
-
-    
-    
     public TextGen(int numberOfFiles, int numberOfParagraphs, int numberOfSentences, int numberOfWords) {
+
         this.numberOfFiles = numberOfFiles;
         this.numberOfParagraphs = numberOfParagraphs;
         this.numberOfSentences = numberOfSentences;
@@ -42,19 +29,17 @@ public class TextGen {
 
     }
 
+
     /**
-     * Gets dictionaryay with words from text file
+     * Loads dictionaryay with words from text file
      *
      * @param path plain text file from which you want to get dictionary
      * @return dictionaryay HashSet<String> with unique words from the text file
      */
-    private void loadDictionaryFromBook(String path){
+    public void loadDictionaryFromBook(String path){
         
-        try{
-            FileInputStream fstream = new FileInputStream(path);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path)))){
             String strLine;
-            int i = 0;
             while ((strLine = br.readLine()) != null){
 
                 strLine = strLine.replaceAll(",|\\.|-|;|!|–|:|\\?","");
@@ -63,12 +48,11 @@ public class TextGen {
                     if (word.length() == 0 | word.length() == 1) continue;
 
                     dictionary.add(word);
-                    i++;
                 }
 
             }
         }catch (IOException e){
-            System.out.println("Ошибка разбора файла");
+            e.printStackTrace();
         }
 
     }
@@ -78,7 +62,7 @@ public class TextGen {
     /**
      * Saves dictionary to plain text for further processing
      */
-    private void saveDictionary(){
+    public void saveDictionary(){
 
         try(FileWriter writer = new FileWriter("./Files/dictionary.txt", false)){
             for (String s : dictionary) {
@@ -86,11 +70,11 @@ public class TextGen {
                 writer.append('\n');
             }
         }
-        catch(IOException ex){
-
-            System.out.println(ex.getMessage());
+        catch(IOException e){
+            e.printStackTrace();
         }
     }
+
 
 
     /**
@@ -102,6 +86,7 @@ public class TextGen {
 
         List<String > dictionaryList = new ArrayList<>(dictionary);
         String word;
+        Random random = new Random();
 
         for (int i = 0; i < numberOfFiles; i++) {
 
@@ -114,8 +99,7 @@ public class TextGen {
 
                         for (int l = 0; l < numberOfWords; l++) {
 
-                            Random random = new Random();
-                            word = dictionaryList.get((int)random.nextInt(dictionaryList.size()-1));
+                            word = dictionaryList.get(random.nextInt(dictionaryList.size()-1));
 
                             writer.append(' ');
 
@@ -130,8 +114,8 @@ public class TextGen {
                     writer.append('\n');
                 }
             }
-            catch(IOException ex){
-                System.out.println(ex.getMessage());
+            catch(IOException e){
+                e.printStackTrace();
             }
         }
     }
