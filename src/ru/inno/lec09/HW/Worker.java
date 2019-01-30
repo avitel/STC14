@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Worker implements Runnable {
 
@@ -18,6 +21,7 @@ public class Worker implements Runnable {
     private HashSet<String> dictionary;
     private CollectData c;
     private ArrayList<String> localRes = new ArrayList<>();
+    private StringBuilder builder = new StringBuilder();
 
 
     public Worker(List<String> inFiles, CollectData c) {
@@ -65,36 +69,39 @@ public class Worker implements Runnable {
      * Parses file and add result to CollectData object
      * @param filename
      */
-    public void parseFile(String filename){
+    public void parseFile(String filename) {
 
         try {
-            String ls = Files.lines(Paths.get(filename)).reduce((s1, s2) -> s1 + s2).orElse("");
+            Files.lines(Paths.get(filename)).
+                    forEach((line) -> parseLine(line));
 
-            int letter;
-            StringBuilder builder = new StringBuilder();
-
-            for (int i = 0 ; i < ls.length(); i++){
-                letter = ls.charAt(i);
-                if (letter == '\n' | letter == '\r') {
-                    letter = ' ';
-                }
-
-                builder.append((char) letter);
-
-                if (letter == '.' || letter == '!' || letter == '?') {
-                    if (builder.length() != 1) {
-                        if (existInSentence(builder)) {
-                            localRes.add(builder.toString());
-                        }
-                    }
-                    builder = new StringBuilder();
-                }
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
 
+
+    /**
+     * Parses one line of files
+     * @param line
+     */
+    private void parseLine(String line){
+
+        line.chars().forEach((symbol) -> {
+            builder.append((char)symbol);
+            if (symbol == '.' || symbol == '!' || symbol == '?') {
+                if (sentenceExistInDictionary(builder)) {
+                    localRes.add(builder.toString());
+                    builder.delete(0, builder.length());
+                }
+            }
+        });
+    }
+
+
+
+//    public void parseFile(String filename){
 //        try   (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))){
 //            int letter;
 //            StringBuilder builder = new StringBuilder();
@@ -118,7 +125,7 @@ public class Worker implements Runnable {
 //        }catch (IOException e){
 //            System.out.println("file parsing error");
 //        }
-    }
+//    }
 
 
 
@@ -128,7 +135,7 @@ public class Worker implements Runnable {
      * @param sentence
      * @return boolean
      */
-    private boolean existInSentence(StringBuilder sentence){
+    private boolean sentenceExistInDictionary(StringBuilder sentence){
 
         String[] words = sentence.toString().replaceAll(",|\\.|-|;|!|–|:|\\?","").split(" ");
         for (String word : words) {
