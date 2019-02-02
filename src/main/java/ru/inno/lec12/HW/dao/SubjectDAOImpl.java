@@ -1,67 +1,141 @@
 package ru.inno.lec12.HW.dao;
 
-import ru.inno.lec12.HW.entity.Person;
 import ru.inno.lec12.HW.entity.Subject;
+import ru.inno.lec12.HW.entity.Person;
 
-import java.sql.Connection;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class SubjectDAOImpl implements SubjectDAO {
 
-    public static final String INSERT_SUBJECT_SQL_TEMPLATE =
-            "insert into subject (description) values (?)";
+
+    public static final String CREAT_SUBJECT_SQL_TEMPLATE =
+            "insert into subject (description) values (?) returning id";
+
+    public static final String GET_SUBJECT_SQL_TEMPLATE =
+            "select * from subject where id = ?";
 
     public static final String UPDATE_SUBJECT_SQL_TEMPLATE =
-            "update subject set description = ?, where id = ?";
+            "update subject set description = ?  where id = ?";
 
     public static final String DELETE_SUBJECT_SQL_TEMPLATE =
             "delete from subject where id = ?";
 
-    public static final String GET_ALL_SUBJECT =
+    public static final String GET_ALL_SUBJECT_TEMPLATE =
             "select * from subject";
 
-    public static final String GET_ALL_SUBJECT_BY_SUBJECT =
-            "select * from subject p inner join course c on p.id = c.subject_id where id = ?";
-    
-    
+    public static final String GET_ALL_SUBJECT_BY_PERSON_TEMPLATE =
+            "select * from subject p inner join course c on p.id = c.subject_id where person_id = ?";
+
+    public static final String JOIN_TO_COURSE_TEMPLATE =
+            "insert into course (subject_id, person_id) values ";
+
+
+
     private final Connection connection;
+
 
     public SubjectDAOImpl(Connection connection) {
         this.connection = connection;
     }
 
+
     @Override
-    public int createSubject(Subject subject) {
-        return 0;
+    public void createSubject(Subject subject) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(CREAT_SUBJECT_SQL_TEMPLATE)) {
+            statement.setString(1, subject.getDescription());
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                subject.setId(rs.getInt("id"));
+            }else {
+                throw new SQLDataException("something went wrong");
+            }
+        }
     }
 
-    @Override
-    public void updateSubject(Subject subject) {
 
+    @Override
+    public Subject getSubject(int id) throws SQLException {
+
+        try (PreparedStatement statement = connection.prepareStatement(GET_SUBJECT_SQL_TEMPLATE)) {
+            statement.setString(1, Integer.toString(id));
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                Subject subject = new Subject(rs.getInt("id"), rs.getString("description"));
+                return subject;
+            }else {
+                throw new SQLDataException("no such subject");
+            }
+        }
     }
 
-    @Override
-    public void deleteSubject(Subject subject) {
 
+    @Override
+    public void updateSubject(Subject subject) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_SUBJECT_SQL_TEMPLATE)) {
+            statement.setString(1, Integer.toString(subject.getId()));
+            statement.execute();
+        }
     }
 
+
     @Override
-    public Collection<Subject> getAllSubjects() {
-        return null;
+    public void deleteSubject(Subject subject) throws SQLException{
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_SUBJECT_SQL_TEMPLATE)) {
+            statement.setString(1, Integer.toString(subject.getId()));
+            statement.execute();
+        }
     }
 
+
     @Override
-    public Collection<Subject> getSubjectsByPerson(Person subject) {
-        return null;
+    public ArrayList<Subject> getAllSubjects() throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(GET_SUBJECT_SQL_TEMPLATE)) {
+            ResultSet rs = statement.executeQuery();
+
+            ArrayList<Subject> ls = new ArrayList<>();
+
+            while (rs.next()) {
+                ls.add(new Subject(rs.getInt("id"), rs.getString("description")));
+            }
+
+            return ls;
+        }
     }
 
-    @Override
-    public void linkToCourse(Person person, Subject subject) {
 
+    @Override
+    public Collection<Subject> getSubjectsByPerson(Person person) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_SUBJECT_BY_PERSON_TEMPLATE)) {
+            statement.setString(1, Integer.toString(person.getId()));
+            ResultSet rs = statement.executeQuery();
+
+            ArrayList<Subject> ls = new ArrayList<>();
+
+            while (rs.next()) {
+                ls.add(new Subject(rs.getInt("id"), rs.getString("description")));
+            }
+
+            return ls;
+        }
     }
 
-    @Override
-    public void linkToCourse(Subject subject, Person... person) {
 
+    @Override
+    public void joinToCourse(Subject subject, Person... persons) throws SQLException {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(JOIN_TO_COURSE_TEMPLATE );
+        for (Person person : persons) {
+            sb.append( "("+subject.getId()+", "+person.getId()+"),");
+        }
+        sb.deleteCharAt(sb.length()-1);
+
+        try (PreparedStatement statement = connection.prepareStatement(sb.toString())) {
+            statement.execute();
+        }
     }
 }

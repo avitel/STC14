@@ -8,6 +8,17 @@ public class Person {
     private String name;
     private long birthDate;
 
+    public Person(int id, String name, long birthDate) {
+        this.id = id;
+        this.name = name;
+        this.birthDate = birthDate;
+    }
+
+    public Person(String name, long birthDate) {
+        this.name = name;
+        this.birthDate = birthDate;
+    }
+
     public int getId() {
         return id;
     }

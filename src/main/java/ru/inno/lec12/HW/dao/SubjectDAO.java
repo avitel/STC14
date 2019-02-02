@@ -8,19 +8,19 @@ import java.util.Collection;
 
 public interface SubjectDAO {
 
-    int createSubject(Subject subject);
+    void createSubject(Subject subject) throws SQLException;
 
-    void updateSubject(Subject subject);
+    Subject getSubject(int id) throws SQLException;
 
-    void deleteSubject(Subject subject);
+    void updateSubject(Subject subject) throws SQLException;
 
-    Collection<Subject> getAllSubjects();
+    void deleteSubject(Subject subject) throws SQLException;
 
-    Collection<Subject> getSubjectsByPerson(Person person);
+    Collection<Subject> getAllSubjects() throws SQLException;
 
-    void linkToCourse(Person person, Subject subject);
+    Collection<Subject> getSubjectsByPerson(Person person) throws SQLException;
 
-    void linkToCourse(Subject subject, Person... person);
+    void joinToCourse(Subject subject, Person... person) throws SQLException;
 
 }
 

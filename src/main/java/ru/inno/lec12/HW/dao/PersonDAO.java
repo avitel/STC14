@@ -8,16 +8,18 @@ import java.util.Collection;
 
 public interface PersonDAO {
 
-    int createPerson(Person person) throws SQLException;
+    void createPerson(Person person) throws SQLException;
 
-    void updatePerson(Person person);
+    Person getPerson(int id) throws SQLException;
 
-    void deletePerson(Person person);
+    void updatePerson(Person person) throws SQLException;
 
-    Collection<Person> getAllPersons();
+    void deletePerson(Person person) throws SQLException;
 
-    Collection<Person> getPersonsBySubject(Subject subject);
+    Collection<Person> getAllPersons() throws SQLException;
 
-    void linkToCourse(Person person, Subject... subject);
+    Collection<Person> getPersonsBySubject(Subject subject) throws SQLException;
+
+    void joinToCourse(Person person, Subject... subject) throws SQLException;
 
 }

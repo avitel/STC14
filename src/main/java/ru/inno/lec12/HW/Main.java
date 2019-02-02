@@ -1,8 +1,9 @@
 package ru.inno.lec12.HW;
 
-import ru.inno.lec12.HW.dao.CourseDAO;
-import ru.inno.lec12.HW.dao.CourseDAOImpl;
+import ru.inno.lec12.HW.dao.PersonDAO;
+import ru.inno.lec12.HW.dao.PersonDAOImpl;
 import ru.inno.lec12.HW.entity.Person;
+import ru.inno.lec12.HW.entity.Subject;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,12 +16,14 @@ public class Main {
         Connection connection = DriverManager.getConnection(url);
         System.out.println(connection);
 
-        CourseDAO dao = new CourseDAOImpl(connection);
+        PersonDAO dao = new PersonDAOImpl(connection);
 
-        Person person = new Person();
-        person.setName("John Smith");
-        person.setBirthDate(System.currentTimeMillis());
+        Person person = new Person("John Smith", System.currentTimeMillis());
         dao.createPerson(person);
+        System.out.println(person);
+
+        dao.joinToCourse(person, new Subject(1, "Phisic"), new Subject(2, "Literature"));
+
 
         // в конце не забыть закрыть подключение
     }

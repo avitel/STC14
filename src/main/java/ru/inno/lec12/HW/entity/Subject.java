@@ -22,6 +22,11 @@ public class Subject {
         this.description = description;
     }
 
+    public Subject(int id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
