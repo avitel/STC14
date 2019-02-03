@@ -11,6 +11,7 @@ import java.util.Random;
  */
 public class GarbageCollectionDemo {
 
+    private static final String PATH = "./src/main/resources/Files/Class/";
 
 
     /**
@@ -24,17 +25,18 @@ public class GarbageCollectionDemo {
         String str2 ="";
         int remCount=0;
         for (int i = 0; i < mainCycle; i++) {
-            String str = "jkdjdkljfsdlfjsdlfjlsdfsdlfldsfldsfldsfsdlfslfldsfjlsdfldskfvnkrvhisernvkjfvsiuehfd" + random.nextInt();
+            String str = "jkdjdkljfsdlfjsdlfjlsdfsdlfldsfldsfldsfsdlfslfldsfjlsdfldskfvnkrvhisernvkjfvsiuehfdasdsfsfsdfewdrtjnukmikyhcthergcregvtvrtbnnuytjgwergvrtyuythrtc" + random.nextInt();
             for (int j = 0; j < 100; j++) {
                 str2 = str2 + str;
             }
 
             list.add(str2);
-            Thread.sleep(1);
+            //Thread.sleep(1);
 
             if (remCount++ > removeOn){
                 remCount =0;
                 System.out.println("removing");
+
                 for (int j = list.size()-1; j >= 0; j--) {
                    list.remove(j);
                 }
@@ -79,7 +81,7 @@ public class GarbageCollectionDemo {
                     "}\n");
 
             //write class.java
-            String filename = "./Files/Class/"+ className + ".java";
+            String filename = PATH+ className + ".java";
             MyUtilities.saveFile(sourse, filename);
 
             //compile
