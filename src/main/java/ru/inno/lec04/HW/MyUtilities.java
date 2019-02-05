@@ -38,7 +38,7 @@ public class MyUtilities {
      * @param arr
      * @param filename
      */
-    public static void saveCollectionToFile(Collection arr, String filename){
+    public static void saveCollectionToFile(Collection arr, String filename) throws IOException {
         try(FileWriter writer = new FileWriter(filename, false)) {
                 for (Object elem : arr) {
                     writer.write(elem.toString());
@@ -46,7 +46,7 @@ public class MyUtilities {
                 }
 
         }catch (IOException e){
-            System.out.println("save result to collection error");
+            throw e;
         }
     }
 
@@ -70,7 +70,7 @@ public class MyUtilities {
 
     /**
      * make sourse file from string, compile and load class
-     * Interface Worker must have
+     * Interface WorkerOld must have
      *
      * @param code
      * @param packagePath
@@ -81,7 +81,7 @@ public class MyUtilities {
         //decorate class
         StringBuilder sourse = new StringBuilder();
         sourse.append("package "+packagePath+";\n\n" +
-                "public class " + className + " implements Worker {\n" +
+                "public class " + className + " implements WorkerOld {\n" +
                 //"@Override\n" +
                 "public void doWork(){\n" +
                 code +

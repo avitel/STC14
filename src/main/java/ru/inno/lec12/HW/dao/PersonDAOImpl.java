@@ -94,8 +94,8 @@ public class PersonDAOImpl implements PersonDAO {
 
     @Override
     public ArrayList<Person> getAllPersons() throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(GET_PERSON_SQL_TEMPLATE)) {
-            ResultSet rs = statement.executeQuery();
+        try (PreparedStatement statement = connection.prepareStatement(GET_PERSON_SQL_TEMPLATE);
+            ResultSet rs = statement.executeQuery()){
 
             ArrayList<Person> ls = new ArrayList<>();
 

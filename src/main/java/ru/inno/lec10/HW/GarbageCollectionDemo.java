@@ -73,7 +73,7 @@ public class GarbageCollectionDemo {
             //decorate class
             StringBuilder sourse = new StringBuilder();
             sourse.append("package "+packagePath+";\n\n" +
-                    "public class " + className +" implements Worker{\n" +
+                    "public class " + className +" implements WorkerOld{\n" +
                     //"@Override\n" +
                     "public void doWork(){\n" +
                     code +

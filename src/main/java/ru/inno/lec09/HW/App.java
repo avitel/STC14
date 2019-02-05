@@ -1,35 +1,30 @@
 package ru.inno.lec09.HW;
 
-import ru.inno.lec04.HW.MyUtilities;
+import ru.inno.lec05.HW.ParserManager;
 
-import java.util.List;
-
+import java.io.IOException;
 
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        String PATH = "./src/main/resources/Files/";
+        int maxNumberOfThreads = 10;
+        int limitDictionary = 100;
 
         long start = System.currentTimeMillis();
 
-        CollectData cd = new CollectData();
-        cd.loadDictionary("./src/main/resources/Files/dictionary.txt", 100);
-        cd.setMaxNumberOfThreads(10);
+        ParserManager parserManager = new ParserManagerLambda();
 
-        List<Thread> threads = cd.startParsing(cd.getInFilesNames("./src/main/resources/Files", "testGenFiles"));
+        String[] dictionary = parserManager.getDictionaryFromFile(PATH + "dictionary.txt", limitDictionary);
 
-        long finish1 = System.currentTimeMillis();
-        long timeConsumedMillis = finish1 - start;
-        System.out.println("starting worker time : "+ timeConsumedMillis + " ms");
+        String[] arrFiles = parserManager.getFileArray(PATH , "testGenFiles");
 
-        try {
-            for (Thread thread : threads) {
-                thread.join();
-            }
-        }catch (InterruptedException e){
-            System.out.println("thread waiting was interrupted");
-        }
+        int numberOfThreads = Math.min(maxNumberOfThreads, arrFiles.length);
 
-        MyUtilities.saveCollectionToFile(cd.getArrRes(),"./src/main/resources/Files/res.txt");
+        parserManager.setNumberOfThreads(numberOfThreads);
+
+        parserManager.getOccurencies(arrFiles, dictionary, PATH + "occurences.txt" );
 
         long finish2 = System.currentTimeMillis();
         long timeConsumedMillis2 = finish2 - start;

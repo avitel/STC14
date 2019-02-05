@@ -14,21 +14,21 @@ public class App {
         String arg = args[0];
 
         switch (arg){
-            case "heap":
+            case "heapLeaks":
                 gc.getHeapException(10000, 30);
                 break;
             case "heapSimple":
                 Thread.sleep(5000);
-                int[] arra = new int[400_000_000];
+                int[] arra = new int[4_000_000];
                 Thread.sleep(5000);
                 break;
-            case "heapLeaks":
+            case "heap":
                 gc.getHeapException(10000, 10000);
                 break;
 
 
                 // VM option is need to set
-                // -XX:MaxMetaspaceSize 20M
+                // -XX:MaxMetaspaceSize=20M
             case "meta":
                 gc.getMetaspaceException(10000);
                 break;
