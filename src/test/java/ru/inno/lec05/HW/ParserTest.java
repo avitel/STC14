@@ -23,7 +23,7 @@ class ParserTest {
     @BeforeEach
     void setUp() {
 
-        HashSet<String> dictionary = new HashSet<>(Arrays.asList("qwer", "asdf", "test", "yui", "hjk"));
+        HashSet<String> dictionary = new HashSet<>(Arrays.asList("test", "asdf", "test", "right", "hjk"));
         BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("sadfsdfsdf".getBytes())));
         ArrayList<BufferedReader> array = new ArrayList<>();
         array.add(reader);
@@ -33,36 +33,37 @@ class ParserTest {
 
 
 
-
     @Test
     void parseFile() {
 
         ArrayList<String> result = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("This is test sentence".getBytes())));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("This is right sentence.".getBytes())));
 
         try {
             parser.parseFile(reader, result);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertEquals("This is test sentence", result.get(0), "parse file test 1 passed");
+
+       assertEquals("This is right sentence.", (result.size()>0) ? result.get(0) : "", "This is right sentence.");
 
 
-
-        BufferedReader reader1 = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("This is another sentence".getBytes())));
+        int initSize = result.size();
+        BufferedReader reader1 = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("This is bad sentence.".getBytes())));
         try {
             parser.parseFile(reader, result);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertEquals(1, result.size(), "parse file test 2 passed");
+        assertEquals(0, result.size()-initSize, "This is bad sentence");
     }
+
 
 
     @Test
     void sentenceExistInDictionary() {
 
-        assertEquals(true, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf qwer vndsi sdkjvdsk osdcj")), "occurency test 1 passed");
-        assertEquals(false, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf njubhuvgy vndsi sdkjvdsk osdcj")), "occurency test 2 passed");
+        assertEquals(true, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf test vndsi sdkjvdsk osdcj")), "exist in dictionary positive test");
+        assertEquals(false, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf njubhuvgy vndsi sdkjvdsk osdcj")), "exist in dictionary negative test");
     }
 }

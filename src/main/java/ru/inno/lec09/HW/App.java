@@ -2,7 +2,7 @@ package ru.inno.lec09.HW;
 
 import ru.inno.lec05.HW.ParserManager;
 
-import java.io.IOException;
+import java.io.*;
 
 public class App {
 
@@ -16,9 +16,11 @@ public class App {
 
         ParserManager parserManager = new ParserManagerLambda();
 
-        String[] dictionary = parserManager.getDictionaryFromFile(PATH + "dictionary.txt", limitDictionary);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(PATH + "dictionary.txt")));
 
-        String[] arrFiles = parserManager.getFileArray(PATH , "testGenFiles");
+        String[] dictionary = parserManager.getDictionaryFromFile(reader, limitDictionary);
+
+        String[] arrFiles = parserManager.getFileArray(new File(PATH) , "testGenFiles");
 
         int numberOfThreads = Math.min(maxNumberOfThreads, arrFiles.length);
 

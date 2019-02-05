@@ -1,10 +1,7 @@
 package ru.inno.lec05.HW;
 
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class App {
 
@@ -22,7 +19,7 @@ public class App {
 
         String[] dictionary = parserManager.getDictionaryFromFile(reader, limitDictionary);
 
-        String[] arrFiles = parserManager.getFileArray(PATH , "testGenFiles");
+        String[] arrFiles = parserManager.getFileArray(new File(PATH) , "testGenFiles");
 
         int numberOfThreads = Math.min(maxNumberOfThreads, arrFiles.length);
 

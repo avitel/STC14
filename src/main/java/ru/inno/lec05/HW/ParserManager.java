@@ -70,17 +70,17 @@ public class ParserManager implements Occurencies{
      * @return HashSet
      */
     public  String[] getDictionaryFromFile(BufferedReader reader, int limit) throws IOException {
-            String strLine;
-            HashSet<String> dictionary = new HashSet<>();
-            while ((strLine = reader.readLine()) != null){
-                dictionary.add(strLine);
-                if (dictionary.size() == limit) {
-                    break;
-                }
+        String strLine;
+        HashSet<String> dictionary = new HashSet<>();
+        while ((strLine = reader.readLine()) != null){
+            dictionary.add(strLine);
+            if (dictionary.size() == limit) {
+                break;
             }
-            reader.close();
+        }
+        reader.close();
 
-            return dictionary.toArray(new String[dictionary.size()]);
+        return dictionary.toArray(new String[dictionary.size()]);
     }
 
 
@@ -88,13 +88,11 @@ public class ParserManager implements Occurencies{
     /**
      * Gets array of filenames on specified dirname and mask
      *
-     * @param dirname
+     * @param dir
      * @param mask
      * @return array of full filenames contained in 'dirname' with mask 'inFileName'
      */
-    public String[] getFileArray(String dirname, String mask){
-
-        File dir = new File(dirname);
+    public String[] getFileArray(File dir, String mask){
 
         String[] arr = dir.list(new FilenameFilter() {
             @Override
@@ -104,7 +102,7 @@ public class ParserManager implements Occurencies{
         });
 
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = dirname + "/" + arr[i];
+            arr[i] = dir.getPath() + "/" + arr[i];
         }
 
         return arr;
@@ -119,7 +117,11 @@ public class ParserManager implements Occurencies{
      * @param denominator
      * @return ArrayList of List
      */
-    protected ArrayList<ArrayList<BufferedReader>> divideArray(ArrayList<BufferedReader> readers, int denominator) {
+    public ArrayList<ArrayList<BufferedReader>> divideArray(ArrayList<BufferedReader> readers, int denominator) {
+
+        if (denominator == 0){
+            denominator = 1;
+        }
 
         int numberPerOne = (int)Math.round(readers.size() / denominator);
 
@@ -144,7 +146,9 @@ public class ParserManager implements Occurencies{
                     innerArray.add(readers.get(j++));
                 }
             }
-            outerArray.add(innerArray);
+            if (innerArray.size() > 0) {
+                outerArray.add(innerArray);
+            }
         }
         return outerArray;
     }

@@ -13,11 +13,10 @@ public class ParserManagerLambda extends ParserManager {
 
 
     @Override
-    public String[] getFileArray(String dirname, String mask) {
+    public String[] getFileArray(File dir, String mask) {
 
-        File dir = new File(dirname);
         String[] arr = dir.list((dir1, name) -> name.startsWith(mask));
-        IntStream.range(0, arr.length).forEach(i -> arr[i] = dirname + "/" + arr[i]);
+        IntStream.range(0, arr.length).forEach(i -> arr[i] = dir.getPath() + "/" + arr[i]);
         return arr;
     }
 
