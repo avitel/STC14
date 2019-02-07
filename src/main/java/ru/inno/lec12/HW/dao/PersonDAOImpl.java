@@ -1,15 +1,10 @@
 package ru.inno.lec12.HW.dao;
 
-import com.sun.istack.internal.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.inno.lec12.HW.entity.Person;
 import ru.inno.lec12.HW.entity.Subject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
