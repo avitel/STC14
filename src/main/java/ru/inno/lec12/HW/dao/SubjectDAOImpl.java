@@ -1,13 +1,18 @@
 package ru.inno.lec12.HW.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.inno.lec12.HW.entity.Subject;
 import ru.inno.lec12.HW.entity.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class SubjectDAOImpl implements SubjectDAO {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubjectDAOImpl.class);
 
 
     public static final String CREAT_SUBJECT_SQL_TEMPLATE =
@@ -53,6 +58,8 @@ public class SubjectDAOImpl implements SubjectDAO {
                 throw new SQLDataException("something went wrong");
             }
         }
+        LOGGER.info("person " +subject.getId() + " " + subject.getDescription() + " was created");
+
     }
 
 
@@ -79,6 +86,8 @@ public class SubjectDAOImpl implements SubjectDAO {
             statement.setString(1, Integer.toString(subject.getId()));
             statement.execute();
         }
+        LOGGER.info("person " +subject.getId() + " " + subject.getDescription() + " was updated");
+
     }
 
 
@@ -88,6 +97,8 @@ public class SubjectDAOImpl implements SubjectDAO {
             statement.setString(1, Integer.toString(subject.getId()));
             statement.execute();
         }
+        LOGGER.info("person " +subject.getId() + " " + subject.getDescription() + " was deleted");
+
     }
 
 
@@ -137,5 +148,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         try (PreparedStatement statement = connection.prepareStatement(sb.toString())) {
             statement.execute();
         }
+        LOGGER.info(String.format("persons " + Arrays.toString(persons)) + " were joined to course "+subject);
+
     }
 }

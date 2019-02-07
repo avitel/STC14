@@ -1,13 +1,23 @@
 package ru.inno.lec12.HW.dao;
 
+import com.sun.istack.internal.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.inno.lec12.HW.entity.Person;
 import ru.inno.lec12.HW.entity.Subject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class PersonDAOImpl implements PersonDAO {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonDAOImpl.class);
 
 
     public static final String CREAT_PERSON_SQL_TEMPLATE =
@@ -51,8 +61,11 @@ public class PersonDAOImpl implements PersonDAO {
             if (rs.next()) {
                 person.setId(rs.getInt("id"));
             }else {
+                LOGGER.error("returning id fail");
                 throw new SQLDataException("something went wrong");
             }
+
+            LOGGER.info("person " +person.getId() + " " + person.getName() + " was created");
         }
     }
 
@@ -79,6 +92,9 @@ public class PersonDAOImpl implements PersonDAO {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_PERSON_SQL_TEMPLATE)) {
             statement.setString(1, Integer.toString(person.getId()));
             statement.execute();
+
+            LOGGER.info("person " +person.getId() + " " + person.getName() + " was updated");
+
         }
     }
 
@@ -88,6 +104,8 @@ public class PersonDAOImpl implements PersonDAO {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_PERSON_SQL_TEMPLATE)) {
             statement.setString(1, Integer.toString(person.getId()));
             statement.execute();
+
+            LOGGER.info("person " +person.getId() + " " + person.getName() + " was deleted");
         }
     }
 
@@ -109,7 +127,7 @@ public class PersonDAOImpl implements PersonDAO {
 
 
     @Override
-    public Collection<Person> getPersonsBySubject(Subject subject) throws SQLException {
+    public Collection<Person> getPersonsBySubject( Subject subject) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_PERSON_BY_SUBJECT_TEMPLATE)) {
             statement.setString(1, Integer.toString(subject.getId()));
             ResultSet rs = statement.executeQuery();
@@ -138,5 +156,8 @@ public class PersonDAOImpl implements PersonDAO {
         try (PreparedStatement statement = connection.prepareStatement(sb.toString())) {
              statement.execute();
         }
+
+        LOGGER.info(String.format("person %d %s was joined to course %s", person.getId(), person.getName(), Arrays.toString(subjects)));
+
     }
 }
