@@ -10,7 +10,7 @@ public class App {
     public static void main(String[] args) {
 
         Properties property = new Properties();
-        try (FileInputStream fs = new FileInputStream("./src/ru/inno/lec07/HW/conf.md")) {
+        try (FileInputStream fs = new FileInputStream("./src/main/java/ru/inno/lec07/HW/conf.md")) {
             property.load(fs);
         } catch (IOException e) {
             e.printStackTrace();

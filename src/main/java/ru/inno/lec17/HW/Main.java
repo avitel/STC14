@@ -14,7 +14,5 @@ public class Main {
 
         //классичекий пример
         //BufferedReader br = new BufferedReader(new FileReader("dfdf")));
-
-
     }
 }

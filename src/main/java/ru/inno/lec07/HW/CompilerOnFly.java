@@ -46,7 +46,7 @@ public class CompilerOnFly {
         //decorate class
         StringBuilder sourse = new StringBuilder();
         sourse.append("package "+packagePath+";\n\n" +
-                "public class " + className + " implements WorkerOld{\n" +
+                "public class " + className + " implements Worker{\n" +
                 //"@Override\n" +
                 "public void doWork(){\n" +
                 code +
