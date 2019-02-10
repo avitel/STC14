@@ -28,12 +28,14 @@ public class MainProducer {
         while (true){
 
             String message = null;
+
             try {
                 message = keyboardReader.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
             }
+
             if ("quit".equals(message)) break;
             producerWrapper.sendMessage(Integer.toString(key), message);
             key++;

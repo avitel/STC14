@@ -1,18 +1,16 @@
 package ru.inno.lec05.HW;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ParserTest {
 
@@ -65,5 +63,35 @@ class ParserTest {
 
         assertEquals(true, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf test vndsi sdkjvdsk osdcj")), "exist in dictionary positive test");
         assertEquals(false, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf njubhuvgy vndsi sdkjvdsk osdcj")), "exist in dictionary negative test");
+    }
+
+
+
+    @Test
+    void run() {
+
+        Parser mockParser = mock(Parser.class);
+
+        doCallRealMethod().when(mockParser).run();
+        doCallRealMethod().when(mockParser).setReaders(isA(List.class));
+        try {
+            doNothing().when(mockParser).parseFile(isA(BufferedReader.class), isA(ArrayList.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader testBr = new BufferedReader(new StringReader("testString"));
+        ArrayList<BufferedReader> testAr = new ArrayList<>();
+        testAr.add(testBr);
+
+        mockParser.setReaders(testAr);
+        mockParser.run();
+
+
+        try {
+            verify(mockParser, times(parser.getReaders().size())).parseFile(testBr, new ArrayList<>());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

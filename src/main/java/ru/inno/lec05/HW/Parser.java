@@ -24,6 +24,13 @@ public class Parser implements Runnable {
         this.dictionary = dictionary;
     }
 
+    public List<BufferedReader> getReaders() {
+        return readers;
+    }
+
+    public void setReaders(List<BufferedReader> readers) {
+        this.readers = readers;
+    }
 
     public static List<String> getFinalresult() {
         return finalresult;

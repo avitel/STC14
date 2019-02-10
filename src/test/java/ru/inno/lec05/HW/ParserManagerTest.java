@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,9 +22,6 @@ class ParserManagerTest {
 
     }
 
-    @Test
-    void createReaders() {
-    }
 
 
     @Test
@@ -75,5 +73,41 @@ class ParserManagerTest {
 
     @Test
     void startThreads() {
+    }
+
+
+    @Test
+    void createReaders() {
+    }
+
+
+
+    @Test
+    void getOccurencies() {
+
+        ParserManager mockParser = mock(ParserManager.class);
+
+        try {
+            doCallRealMethod().when(mockParser).getOccurencies(any(),any(),any());
+            when(mockParser.createReaders(any())).thenReturn(new ArrayList<>());
+            when(mockParser.divideArray(any(),isA(Integer.class))).thenReturn(new ArrayList<>());
+            when(mockParser.startThreads(any(),any())).thenReturn(new ArrayList<>());
+            mockParser.getOccurencies(new String[]{"test"}, new String[]{"test2"}, "test3");
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            verify(mockParser, times(1)).createReaders(any());
+            verify(mockParser, times(1)).divideArray(any(), isA(Integer.class));
+            verify(mockParser, times(1)).startThreads(any(), any());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

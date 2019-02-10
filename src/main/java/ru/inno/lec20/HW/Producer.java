@@ -19,9 +19,18 @@ public class Producer {
     private org.apache.kafka.clients.producer.Producer producer;
     private String topic;
 
+
     public Producer(Properties props, String topic) {
         this.producer = new KafkaProducer<>(props);
         this.topic = topic;
+    }
+
+    public void setProducer(org.apache.kafka.clients.producer.Producer producer) {
+        this.producer = producer;
+    }
+
+    public org.apache.kafka.clients.producer.Producer getProducer() {
+        return producer;
     }
 
     public void setTopic(String topic) {
@@ -31,6 +40,8 @@ public class Producer {
     public String getTopic() {
         return topic;
     }
+
+
 
     public void sendMessage(String key, String message){
 
