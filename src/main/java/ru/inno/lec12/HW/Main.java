@@ -11,6 +11,7 @@ import ru.inno.lec12.HW.entity.Subject;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 public class Main {
 
@@ -20,19 +21,17 @@ public class Main {
         String url = "jdbc:postgresql://localhost:5432/ilya";
 
         try (Connection connection = DriverManager.getConnection(url)) {
-            System.out.println(connection);
+            LOGGER.info("Connection successful {0}", connection);
 
             PersonDAO dao = new PersonDAOImpl(connection);
 
             Person person = new Person("John Smith", System.currentTimeMillis());
             dao.createPerson(person);
-            System.out.println(person);
 
             dao.joinToCourse(person, new Subject(1, "Phisic"), new Subject(2, "Literature"));
 
         } catch (SQLException e) {
-            LOGGER.error(e.toString());
-            e.printStackTrace();
+            LOGGER.error("",e);
         }
 
     }

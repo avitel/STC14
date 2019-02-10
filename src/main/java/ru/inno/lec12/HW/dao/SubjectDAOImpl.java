@@ -6,6 +6,7 @@ import ru.inno.lec12.HW.entity.Subject;
 import ru.inno.lec12.HW.entity.Person;
 
 import java.sql.*;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,7 +59,7 @@ public class SubjectDAOImpl implements SubjectDAO {
                 throw new SQLDataException("something went wrong");
             }
         }
-        LOGGER.info("person " +subject.getId() + " " + subject.getDescription() + " was created");
+        LOGGER.info("person {0} {1} was created", subject.getId(), subject.getDescription());
 
     }
 
@@ -86,7 +87,7 @@ public class SubjectDAOImpl implements SubjectDAO {
             statement.setString(1, Integer.toString(subject.getId()));
             statement.execute();
         }
-        LOGGER.info("person " +subject.getId() + " " + subject.getDescription() + " was updated");
+        LOGGER.info("person {0} {1} was updated", subject.getId(), subject.getDescription());
 
     }
 
@@ -97,7 +98,7 @@ public class SubjectDAOImpl implements SubjectDAO {
             statement.setString(1, Integer.toString(subject.getId()));
             statement.execute();
         }
-        LOGGER.info("person " +subject.getId() + " " + subject.getDescription() + " was deleted");
+        LOGGER.info("person {0} {1} was deleted", subject.getId(), subject.getDescription());
 
     }
 
@@ -148,7 +149,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         try (PreparedStatement statement = connection.prepareStatement(sb.toString())) {
             statement.execute();
         }
-        LOGGER.info(String.format("persons " + Arrays.toString(persons)) + " were joined to course "+subject);
+        LOGGER.info("people {0} were joined to course {1}", Arrays.toString(persons), subject);
 
     }
 }

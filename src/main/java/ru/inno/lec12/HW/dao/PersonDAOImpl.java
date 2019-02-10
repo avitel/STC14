@@ -6,6 +6,7 @@ import ru.inno.lec12.HW.entity.Person;
 import ru.inno.lec12.HW.entity.Subject;
 
 import java.sql.*;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,7 +61,7 @@ public class PersonDAOImpl implements PersonDAO {
                 throw new SQLDataException("something went wrong");
             }
 
-            LOGGER.info("person " +person.getId() + " " + person.getName() + " was created");
+            LOGGER.info("person {0} {1} was created", person.getId(), person.getName());
         }
     }
 
@@ -88,7 +89,7 @@ public class PersonDAOImpl implements PersonDAO {
             statement.setString(1, Integer.toString(person.getId()));
             statement.execute();
 
-            LOGGER.info("person " +person.getId() + " " + person.getName() + " was updated");
+            LOGGER.info("person {0} {1} was updated", person.getId(), person.getName());
 
         }
     }
@@ -100,7 +101,7 @@ public class PersonDAOImpl implements PersonDAO {
             statement.setString(1, Integer.toString(person.getId()));
             statement.execute();
 
-            LOGGER.info("person " +person.getId() + " " + person.getName() + " was deleted");
+            LOGGER.info("person {0} {1} was deleted", person.getId(), person.getName());
         }
     }
 
@@ -152,7 +153,7 @@ public class PersonDAOImpl implements PersonDAO {
              statement.execute();
         }
 
-        LOGGER.info(String.format("person %d %s was joined to course %s", person.getId(), person.getName(), Arrays.toString(subjects)));
+        LOGGER.info("person {0} {1} was joined to course {2}", person.getId(), person.getName(), Arrays.toString(subjects));
 
     }
 }
