@@ -3,6 +3,9 @@ package ru.inno.lec05.HW;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -35,15 +38,17 @@ class ParserManagerTest {
     @Test
     void getDictionaryFromFile() {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("line1 \n line2 \n line3".getBytes())));
-
         String[] res1 = null;
         try {
-            res1 = parserManager.getDictionaryFromFile(reader,1000);
+            res1 = parserManager.getDictionaryFromFile(new BufferedReader(new StringReader("line1 \n line2 \n line3")),1000);
         } catch (IOException e) {
             e.printStackTrace();
         }
         assertEquals(3, res1.length, "0 readers, denominator  = 0");
+
+        //negative
+        assertThrows(NullPointerException.class, () -> parserManager.getDictionaryFromFile(null,1000));
+
     }
 
 
@@ -59,7 +64,11 @@ class ParserManagerTest {
         String[] arrFiles = parserManager.getFileArray(fileObject , "testGenFiles");
         assertEquals(2, arrFiles.length, "file array with 2 items");
         assertEquals("MyPath/file2", arrFiles[1], "test 2 item of file array");
+
+        //negative
+        assertThrows(NullPointerException.class, () -> parserManager.getFileArray(null , ""));
     }
+
 
 
     @Test
@@ -76,6 +85,10 @@ class ParserManagerTest {
         readers.add(new BufferedReader(new InputStreamReader(new ByteArrayInputStream("occurency".getBytes()))));
         ArrayList<?> res3 = parserManager.divideArray(readers,2);
         assertEquals(2, res3.size(), "2 readers, denominator = 2");
+
+        //negative
+        assertThrows(NullPointerException.class, () -> parserManager.divideArray(null , 0));
+
     }
 
 
@@ -83,11 +96,18 @@ class ParserManagerTest {
     @Test
     void startThreads() {
 
-        ParserManager mockParserManager = mock(ParserManager.class);
-        Parser mockParser = mock(Parser.class);
+        Thread mockThread = new Thread(() -> {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
+        ParserManager mockParserManager = mock(ParserManager.class);
         doCallRealMethod().when(mockParserManager).startThreads(any(), any());
-        when(mockParserManager.getParser(any(), any())).thenReturn(mockParser);
+        when(mockParserManager.getThread(any())).thenReturn(mockThread);
+
 
         ArrayList<ArrayList<BufferedReader>> arr = new ArrayList<>();
         arr.add(new ArrayList<>());
@@ -97,6 +117,8 @@ class ParserManagerTest {
             assertEquals(true, thread.isAlive());
         }
 
+        //negative
+        assertThrows(NullPointerException.class, () -> mockParserManager.startThreads(null , null));
     }
 
 
@@ -127,7 +149,6 @@ class ParserManagerTest {
             e.printStackTrace();
         }
 
-
         try {
             verify(mockParser, times(1)).createReaders(any());
             verify(mockParser, times(1)).divideArray(any(), isA(Integer.class));
@@ -135,5 +156,8 @@ class ParserManagerTest {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        //negative
+        assertThrows(NullPointerException.class, () -> mockParser.getOccurencies(null, null, "test3"));
     }
 }

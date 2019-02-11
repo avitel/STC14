@@ -155,13 +155,12 @@ public class ParserManager implements Occurencies{
 
 
     /**
-     * Gets Parser Objects. It needs for tests.
-     * @param readers
-     * @param dictionary
+     *
+     * @param runnable
      * @return
      */
-    protected Parser getParser(List<BufferedReader> readers, HashSet<String> dictionary){
-        return new Parser(readers, dictionary);
+    protected Thread getThread(Runnable runnable){
+        return new Thread(runnable);
     }
 
 
@@ -177,8 +176,8 @@ public class ParserManager implements Occurencies{
         ArrayList<Thread> threads = new ArrayList<>();
 
         for (ArrayList<BufferedReader> array : arrays) {
-            Parser parser = getParser(array, dictionary);
-            Thread thread = new Thread(parser);
+            Parser parser = new Parser(array, dictionary);
+            Thread thread = getThread(parser);
             thread.start();
             threads.add(thread);
         }

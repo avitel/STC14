@@ -35,10 +35,9 @@ class ParserTest {
     void parseFile() {
 
         ArrayList<String> result = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("This is right sentence.".getBytes())));
 
         try {
-            parser.parseFile(reader, result);
+            parser.parseFile(new BufferedReader(new StringReader("This is right sentence.")), result);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,15 +46,27 @@ class ParserTest {
 
 
         int initSize = result.size();
-        BufferedReader reader1 = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("This is bad sentence.".getBytes())));
         try {
-            parser.parseFile(reader, result);
+            parser.parseFile(new BufferedReader(new StringReader("This is bad sentence.")), result);
         } catch (IOException e) {
             e.printStackTrace();
         }
         assertEquals(0, result.size()-initSize, "This is bad sentence");
-    }
 
+
+        initSize = result.size();
+        try {
+            parser.parseFile(new BufferedReader(new StringReader("test string")), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertEquals(0, result.size()-initSize, "");
+
+
+        //negative
+        assertThrows(NullPointerException.class, () -> parser.parseFile(null, new ArrayList<>()));
+
+    }
 
 
     @Test
@@ -63,6 +74,10 @@ class ParserTest {
 
         assertEquals(true, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf test vndsi sdkjvdsk osdcj")), "exist in dictionary positive test");
         assertEquals(false, parser.sentenceExistInDictionary(new StringBuilder("fjfjfj yijrigjr ccvcf njubhuvgy vndsi sdkjvdsk osdcj")), "exist in dictionary negative test");
+        assertEquals(false, parser.sentenceExistInDictionary(new StringBuilder("")), "");
+
+        //negative
+        assertThrows(NullPointerException.class, () -> parser.sentenceExistInDictionary(null));
     }
 
 
