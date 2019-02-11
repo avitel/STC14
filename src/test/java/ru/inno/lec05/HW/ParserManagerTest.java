@@ -2,14 +2,22 @@ package ru.inno.lec05.HW;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ParserManager.class)
 class ParserManagerTest {
 
     private ParserManager parserManager;
@@ -71,13 +79,31 @@ class ParserManagerTest {
     }
 
 
+
     @Test
     void startThreads() {
+
+        ParserManager mockParserManager = mock(ParserManager.class);
+        Parser mockParser = mock(Parser.class);
+
+        doCallRealMethod().when(mockParserManager).startThreads(any(), any());
+        when(mockParserManager.getParser(any(), any())).thenReturn(mockParser);
+
+        ArrayList<ArrayList<BufferedReader>> arr = new ArrayList<>();
+        arr.add(new ArrayList<>());
+        List<Thread> threads = mockParserManager.startThreads(arr, new HashSet<>());
+
+        for (Thread thread : threads) {
+            assertEquals(true, thread.isAlive());
+        }
+
     }
 
 
     @Test
     void createReaders() {
+
+
     }
 
 
