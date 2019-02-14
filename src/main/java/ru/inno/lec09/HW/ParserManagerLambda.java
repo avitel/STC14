@@ -12,6 +12,10 @@ import java.util.stream.IntStream;
 public class ParserManagerLambda extends ParserManager {
 
 
+    public ParserManagerLambda(int numberOfThreads) {
+        super(numberOfThreads);
+    }
+
     @Override
     public String[] getFileArray(File dir, String mask) {
 

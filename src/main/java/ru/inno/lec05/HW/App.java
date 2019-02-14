@@ -11,24 +11,11 @@ public class App {
         int maxNumberOfThreads = 10;
         int limitDictionary = 100;
 
-        long start = System.currentTimeMillis();
-
-        ParserManager parserManager = new ParserManager();
+        ParserManager parserManager = new ParserManager(maxNumberOfThreads);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(PATH + "dictionary.txt")));
 
-        String[] dictionary = parserManager.getDictionaryFromFile(reader, limitDictionary);
+        parserManager.getOccurencies(parserManager.getFileArray(new File(PATH) , "testGenFiles"), parserManager.getDictionaryFromFile(reader, limitDictionary), PATH + "occurences.txt" );
 
-        String[] arrFiles = parserManager.getFileArray(new File(PATH) , "testGenFiles");
-
-        int numberOfThreads = Math.min(maxNumberOfThreads, arrFiles.length);
-
-        parserManager.setNumberOfThreads(numberOfThreads);
-
-        parserManager.getOccurencies(arrFiles, dictionary, PATH + "occurences.txt" );
-
-        long finish2 = System.currentTimeMillis();
-        long timeConsumedMillis2 = finish2 - start;
-        System.out.println("total time : "+ timeConsumedMillis2 + " ms");
     }
 }

@@ -28,8 +28,7 @@ class ParserManagerTest {
 
     @BeforeEach
     void setUp() {
-        parserManager = new ParserManager();
-        parserManager.setNumberOfThreads(1);
+        parserManager = new ParserManager(1);
 
     }
 

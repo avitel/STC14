@@ -14,7 +14,7 @@ public class App {
 
         long start = System.currentTimeMillis();
 
-        ParserManager parserManager = new ParserManagerLambda();
+        ParserManager parserManager = new ParserManagerLambda(maxNumberOfThreads);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(PATH + "dictionary.txt")));
 
@@ -24,7 +24,6 @@ public class App {
 
         int numberOfThreads = Math.min(maxNumberOfThreads, arrFiles.length);
 
-        parserManager.setNumberOfThreads(numberOfThreads);
 
         parserManager.getOccurencies(arrFiles, dictionary, PATH + "occurences.txt" );
 

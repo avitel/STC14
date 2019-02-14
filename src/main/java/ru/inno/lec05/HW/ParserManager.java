@@ -13,15 +13,10 @@ public class ParserManager implements Occurencies{
 
     private int numberOfThreads;
 
-    public void setNumberOfThreads(int numberOfThreads) {
+
+    public ParserManager(int numberOfThreads) {
         this.numberOfThreads = numberOfThreads;
     }
-
-    public int getNumberOfThreads() {
-        return numberOfThreads;
-    }
-
-
 
     /**
      * Finds occurencies of words of dictionary to sentences of files
