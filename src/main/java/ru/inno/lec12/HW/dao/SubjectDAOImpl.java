@@ -59,7 +59,7 @@ public class SubjectDAOImpl implements SubjectDAO {
                 throw new SQLDataException("something went wrong");
             }
         }
-        LOGGER.info("person {0} {1} was created", subject.getId(), subject.getDescription());
+        LOGGER.info("person {} {} was created", subject.getId(), subject.getDescription());
 
     }
 
@@ -87,7 +87,7 @@ public class SubjectDAOImpl implements SubjectDAO {
             statement.setString(1, Integer.toString(subject.getId()));
             statement.execute();
         }
-        LOGGER.info("person {0} {1} was updated", subject.getId(), subject.getDescription());
+        LOGGER.info("person {} {} was updated", subject.getId(), subject.getDescription());
 
     }
 
@@ -98,7 +98,7 @@ public class SubjectDAOImpl implements SubjectDAO {
             statement.setString(1, Integer.toString(subject.getId()));
             statement.execute();
         }
-        LOGGER.info("person {0} {1} was deleted", subject.getId(), subject.getDescription());
+        LOGGER.info("person {} {} was deleted", subject.getId(), subject.getDescription());
 
     }
 
@@ -149,7 +149,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         try (PreparedStatement statement = connection.prepareStatement(sb.toString())) {
             statement.execute();
         }
-        LOGGER.info("people {0} were joined to course {1}", Arrays.toString(persons), subject);
+        LOGGER.info("people {} were joined to course {}", Arrays.toString(persons), subject);
 
     }
 }

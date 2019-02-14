@@ -21,7 +21,7 @@ public class Main {
         String url = "jdbc:postgresql://localhost:5432/ilya";
 
         try (Connection connection = DriverManager.getConnection(url)) {
-            LOGGER.info("Connection successful {0}", connection);
+            LOGGER.info("Connection successful {}", connection);
 
             PersonDAO dao = new PersonDAOImpl(connection);
 

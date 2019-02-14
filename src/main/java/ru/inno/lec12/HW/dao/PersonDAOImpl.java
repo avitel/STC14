@@ -61,7 +61,7 @@ public class PersonDAOImpl implements PersonDAO {
                 throw new SQLDataException("something went wrong");
             }
 
-            LOGGER.info("person {0} {1} was created", person.getId(), person.getName());
+            LOGGER.info("person {} {} was created", person.getId(), person.getName());
         }
     }
 
@@ -89,7 +89,7 @@ public class PersonDAOImpl implements PersonDAO {
             statement.setString(1, Integer.toString(person.getId()));
             statement.execute();
 
-            LOGGER.info("person {0} {1} was updated", person.getId(), person.getName());
+            LOGGER.info("person {} {} was updated", person.getId(), person.getName());
 
         }
     }
@@ -101,7 +101,7 @@ public class PersonDAOImpl implements PersonDAO {
             statement.setString(1, Integer.toString(person.getId()));
             statement.execute();
 
-            LOGGER.info("person {0} {1} was deleted", person.getId(), person.getName());
+            LOGGER.info("person {} {} was deleted", person.getId(), person.getName());
         }
     }
 
@@ -153,7 +153,7 @@ public class PersonDAOImpl implements PersonDAO {
              statement.execute();
         }
 
-        LOGGER.info("person {0} {1} was joined to course {2}", person.getId(), person.getName(), Arrays.toString(subjects));
+        LOGGER.info("person {} {} was joined to course {}", person.getId(), person.getName(), Arrays.toString(subjects));
 
     }
 }
