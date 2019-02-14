@@ -125,6 +125,23 @@ class ParserManagerTest {
     @Test
     void createReaders() {
 
+        BufferedReader mockReader = new BufferedReader(new StringReader("teststring"));
+        ParserManager mockParserManager = mock(ParserManager.class);
+
+        List<BufferedReader> readers = new ArrayList<>();
+
+        try {
+            doCallRealMethod().when(mockParserManager).createReaders(any());
+            when(mockParserManager.getBufferedReader(any())).thenReturn(mockReader);
+            readers = mockParserManager.createReaders(new String[]{"string1","string2"});
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (BufferedReader reader : readers) {
+            assertEquals(reader.getClass(),BufferedReader.class);
+        }
 
     }
 

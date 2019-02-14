@@ -45,6 +45,10 @@ public class ParserManager implements Occurencies{
     }
 
 
+    protected BufferedReader getBufferedReader(String filename) throws FileNotFoundException {
+        return new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+    }
+
 
     /**
      * creates array of Buffered readers
@@ -56,7 +60,7 @@ public class ParserManager implements Occurencies{
 
         ArrayList<BufferedReader> readers = new ArrayList<>();
         for (String filename : arrFiles) {
-            readers.add(new BufferedReader(new InputStreamReader(new FileInputStream(filename))));
+            readers.add(getBufferedReader(filename));
         }
         return readers;
     }
